@@ -1,3 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#">HOME</a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link active"
+        routerLink="/user"
+        role="button"
+        routerLinkActive="active"
+        >User Data</a
+      >
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"
+        >Disabled</a
+      >
+    </li>
+  </ul>
+</nav>
+
 <div style="text-align: center; color: brown">
   <h1>{{ title }} app is running!</h1>
 </div>
@@ -48,30 +74,44 @@
           type="submit"
           class="my-wide-btn"
           mat-raised-button
+          routerLink="/home"
+          role="button"
+          routerLinkActive="active"
           [disabled]="loginFormular.invalid"
         >
-          ZALOGUJ
+          LOGIN
         </button>
       </div>
     </form>
+    <router-outlet></router-outlet>
   </div>
-  <br>
-  <div *ngIf="isResposne" style="text-align: center; color: blue" >
+  <br />
+  <div *ngIf="isUserLogin()" style="text-align: center; color: blue">
     <h1>AUTH RESPONSE</h1>
-    <br>
-    <table style="width:100%">
+    <br />
+    <table style="width: 100%">
       <tr>
         <th>User:</th>
-        <td>{{response.username}}</td>
+        <td>{{ getUserData().username }}</td>
       </tr>
       <tr>
         <th>Roles:</th>
-        <td>{{response.roles}}</td>
+        <td>{{ getUserData().roles }}</td>
       </tr>
       <tr>
         <th>Token:</th>
-        <td>{{response.token}}</td>
+        <td>{{ getUserData().token }}</td>
       </tr>
     </table>
+    <div style="text-align: center">
+      <button
+        type="submit"
+        class="my-wide-btn"
+        mat-raised-button
+        (click)="getUserData()"
+      >
+        GET_SESSION
+      </button>
+    </div>
   </div>
 </div>
