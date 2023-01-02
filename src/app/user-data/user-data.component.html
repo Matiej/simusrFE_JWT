@@ -1,0 +1,21 @@
+<div style="text-align: center">
+  <h1>Resposne for user</h1>
+
+  <ul style="list-style-type: circle">
+    <li>name: {{ userName }}</li>
+    <li>
+      user roles:
+      <ul *ngFor="let role of userRoles; index as i">
+        <li>{{ i+1 }} - {{ role }}</li>
+      </ul>
+    </li>
+  </ul>
+  <div *ngIf="isResponseReady; else bad">
+    <h2>{{ response }}</h2>
+  </div>
+  <ng-template #bad>
+    <ng-container *ngIf="isBadUnauthorizedResponse">
+      <h2 style="color: Red">RESPONSE: {{ response }}</h2>
+    </ng-container>
+  </ng-template>
+</div>

@@ -3,7 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { AuthResponse } from './authresponse';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { UserSesionStorageService } from './user-sesion-storage-service';
 
 @Component({
   selector: 'app-root',
@@ -18,10 +19,10 @@ export class AppComponent implements OnInit {
   loginFormular: FormGroup;
   invalidLogin: boolean = false;
   public response: AuthResponse;
-  public isResposne: boolean = false;
 
-
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router,
+    private authService: AuthService,
+    private sessionStorageService: UserSesionStorageService) { }
 
   ngOnInit() {
     this.initForm();
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  submitLoginForm(): void {
+  public submitLoginForm(): void {
     const login: string = this.loginFormular.value.inputPassword;
     const password: string = this.loginFormular.value.inputPassword;
     console.log(login);
@@ -44,13 +45,24 @@ export class AppComponent implements OnInit {
         console.log('MY RESPONSE FROM BACKEND');
         console.log(response);
         this.response = response;
-        this.isResposne = !this.isResposne;
+        this.sessionStorageService.saveUserSesion(response);
+        this.loginFormular.reset();
+
       },
-      error: (err: HttpErrorResponse)=> {
+      error: (err: HttpErrorResponse) => {
         console.log("Sumbmiting login request ERROR ===> " + err.message);
         console.error(err);
       }
     })
-    // this.loginFormular.reset();
   }
+
+  public getUserData(): AuthResponse {
+    const sessionUser = this.sessionStorageService.getSessionUser();
+    return sessionUser;
+  }
+
+  public isUserLogin(): boolean {
+    return this.sessionStorageService.isUserLoggedIn();
+  }
+
 }
